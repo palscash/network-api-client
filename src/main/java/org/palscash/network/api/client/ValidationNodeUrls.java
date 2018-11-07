@@ -1,5 +1,8 @@
+/*
+
 MIT License
 
+Copyright (c) 2017 ZDP Developers
 Copyright (c) 2018 PalsCash Team
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -19,3 +22,34 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
+*/
+package org.palscash.network.api.client;
+
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.RandomUtils;
+import org.apache.commons.lang3.StringUtils;
+
+public class ValidationNodeUrls {
+
+	public static List<String> getAll() throws IOException {
+		return IOUtils
+				.readLines( //
+						ValidationNodeUrls.class.getResourceAsStream("/validation_nodes"), StandardCharsets.UTF_8) //
+				.stream() //
+				.filter(l -> false == StringUtils.isBlank(l) //
+						&& false == l.startsWith("#")) //
+				.collect(Collectors.toList() //
+		); //
+	}
+
+	public static String getRandomHost() throws IOException {
+		List<String> list = getAll();
+		return list.get(RandomUtils.nextInt(0, list.size()));
+	}
+
+}
